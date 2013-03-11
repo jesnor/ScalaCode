@@ -5,9 +5,11 @@ import scutil.react._
 trait ObservableImpl[T] extends Observable[T] {
   private var observers: Array[Observer[T]] = null
 
-  protected def observerCount = if (observers == null) 0 else observers.size
+  def observerCount = if (observers == null) 0 else observers.size
 
   protected def addObserver(obs: Observer[T]) {
+    println("Add: " + System.identityHashCode(obs) + " to " + this + "(" + System.identityHashCode(this) + ")")
+    
     if (observers == null) {
       observers = Array(obs)
     }
@@ -20,6 +22,8 @@ trait ObservableImpl[T] extends Observable[T] {
   }
 
   protected def removeObserver(obs: Observer[T]) {
+    println("Remove: " + System.identityHashCode(obs) + " from " + this + "(" + System.identityHashCode(this) + ")")
+    
     if (observers.length == 1) {
       observers = null
     }

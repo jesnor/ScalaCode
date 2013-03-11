@@ -4,9 +4,10 @@ import scutil.react.impl._
 
 package object react {
   type Observer[-T] = T => Unit
-  
+
   private class FilterClass[T](v: ObservableValue[Option[T]], f: T => Boolean) extends AbstractObservableValue[Option[T], Option[T]](v) {
     def getValue(v: Option[T]) = v.filter(f)
+    override def toString = "filter(" + v + ")"
   }
 
   implicit class RichObservableOptionValue[T](val v: ObservableValue[Option[T]]) extends AnyVal {
@@ -15,6 +16,7 @@ package object react {
 
   private class MapClass[T, U](v: ObservableValue[T], f: T => U) extends AbstractObservableValue[T, U](v) {
     def getValue(v: T) = f(v)
+    override def toString = "map(" + v + ")"
   }
 
   private class FlatMapClass[T, U](v: ObservableValue[T], f: T => ObservableValue[U]) extends ObservableImpl[U] with ObservableValue[U] {
@@ -75,6 +77,8 @@ package object react {
         value = _: U
       }
     }
+
+    override def toString = "flatMap(" + v + ")"
   }
 
   implicit class RichObservableValue[T](val v: ObservableValue[T]) extends AnyVal {
@@ -82,7 +86,7 @@ package object react {
     def flatMap[U](f: T => ObservableValue[U]): ObservableValue[U] = new FlatMapClass(v, f)
   }
 
-  def obsRef[T](v: T): ObservableVar[T] = new ObservableImpl[T] with ObservableVar[T] {
+  def obsRef[T](name: String, v: T): ObservableVar[T] = new ObservableImpl[T] with ObservableVar[T] {
     private var value: T = v
 
     def apply = value
@@ -93,5 +97,7 @@ package object react {
         fireChange(value)
       }
     }
+
+    override def toString = name
   }
 }
