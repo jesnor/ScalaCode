@@ -26,7 +26,7 @@ object main {
     v
   }
 
-  def foo: Option[Nothing] = None
+  def foo = None
 
   def foo2 = {
     val oo1 = foo
@@ -37,11 +37,12 @@ object main {
   case object Obj
   case class Test1(o: Option[Obj.type])
   case class Test2(o: scala.Option[Obj.type])
+  case class Test3(a: Any)
 
   def main(args: Array[String]) {
     foo2
-    val o1 = 0.some
-    val oo1 = None: Option[Int]
+    val o1 = 10.some
+    val oo1 = None
     val o4: Option[Any] = o1
     val o2 = 4.some
     val o3 = calc(o1, o2)
@@ -53,13 +54,17 @@ object main {
 
     o3 match {
       case Some(x) => println("Some(" + x + ")")
-      case None()  => println("Nothing")
+      case None    => println("Nothing")
     }
 
     val range = 0 until 1000000
-    report("Scala Some", range map (i => Test2(scala.Some(Obj))))
-    report("Scala None", range map (i => Test2(scala.None)))
+    report("scala.Some", range map (i => Test2(scala.Some(Obj))))
+    report("scala.None", range map (i => Test2(scala.None)))
+    report("scala.Some : Any", range map (i => Test3(scala.Some(Obj))))
+    report("scala.None : Any", range map (i => Test3(scala.None)))
     report("AnyVal Some", range map (i => Test1(Obj.some)))
     report("AnyVal None", range map (i => Test1(None)))
+    report("AnyVal Some : Any", range map (i => Test3(Obj.some)))
+    report("AnyVal None : Any", range map (i => Test3(None)))
   }
 }
