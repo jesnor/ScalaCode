@@ -26,12 +26,22 @@ object main {
     v
   }
 
+  def foo: Option[Nothing] = None
+
+  def foo2 = {
+    val oo1 = foo
+    val i: Option[Int] = oo1
+    println(i)
+  }
+
   case object Obj
   case class Test1(o: Option[Obj.type])
   case class Test2(o: scala.Option[Obj.type])
 
   def main(args: Array[String]) {
-    val o1 = 1.some
+    foo2
+    val o1 = 0.some
+    val oo1 = None: Option[Int]
     val o4: Option[Any] = o1
     val o2 = 4.some
     val o3 = calc(o1, o2)
@@ -40,10 +50,10 @@ object main {
     println(o1 == o2)
     println(o1 == Some(1))
     println(o1 == o4)
-    
+
     o3 match {
       case Some(x) => println("Some(" + x + ")")
-      case None() => println("Nothing")
+      case None()  => println("Nothing")
     }
 
     val range = 0 until 1000000

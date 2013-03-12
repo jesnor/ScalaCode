@@ -8,7 +8,7 @@ package object option {
   }
 
   implicit class RichOption[T](val o: scala.Option[T]) extends AnyVal {
-    def toAnyValOption = Option[T](if (o.isEmpty) null.asInstanceOf[T] else o.get)
+    def toAnyValOption: Option[T] = if (o.isEmpty) Option[T]() else o.get.some
   }
 
   implicit def noneToOption[T](n: None.type) = Option[T]()
