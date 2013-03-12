@@ -4,10 +4,10 @@ package scutil.option
  * value has to have type Any as it's not allowed to define a value of type Nothing
  */
 final case class Option[+T](value: Any = null) extends AnyVal with Product with Serializable {
+  private def unsafeGet = value.asInstanceOf[T]
   def isEmpty: Boolean = value == null
   def isDefined: Boolean = !isEmpty
   def nonEmpty = isDefined
-  private def unsafeGet = value.asInstanceOf[T]
   def contains[U >: T](elem: U): Boolean = !isEmpty && value == elem
   def exists(p: T => Boolean): Boolean = !isEmpty && p(unsafeGet)
   def forall(p: T => Boolean): Boolean = isEmpty || p(unsafeGet)
